@@ -13,7 +13,7 @@ func usage() {
 	fmt.Printf(col.Yellow + "Drawsaface" + col.Reset + " usage:\n")
 	fmt.Printf(col.Red)
 	fmt.Printf("\t drawsaface <input_file>\n")
-	fmt.Printf("\t    <input_file> could be: .png, .jpeg, .mp4\n")
+	fmt.Printf("\t    <input_file> could be: .png\n")
 	fmt.Printf(col.Reset)
 }
 

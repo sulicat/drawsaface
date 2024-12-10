@@ -39,13 +39,7 @@ func (daf *Drawsaface) Load(path string) {
 	switch utils.FileExtension(path) {
 	case "png":
 		daf.LoadPng(path)
-	case "mp4":
-		daf.LoadMp4()
 	}
-}
-
-func (daf *Drawsaface) LoadMp4() {
-	fmt.Printf(col.BgRed + "NOT IMPLEMENTED\n" + col.Reset)
 }
 
 func (daf *Drawsaface) LoadPng(path string) {
@@ -76,6 +70,7 @@ func (daf *Drawsaface) Draw() {
 		w, h, _ := term.GetSize(0)
 		DrawAsciiFrame(daf.Frames[i], 0, 0, w, h)
 
+		// TODO: proper framerate
 		time.Sleep(1000000)
 		i += 1
 		i = i % len(daf.Frames)
@@ -86,6 +81,9 @@ func (daf *Drawsaface) Draw() {
 
 func DrawAsciiFrame(f Frame, x, y, width, height int) {
 	//fmt.Printf("%v\n", f)
+
+	// TODO: Good opportunity to parallize
+	// TODO: gradient for every pixel to determine edge
 
 	new_image := resize.Resize(uint(width), uint(height), f, resize.NearestNeighbor)
 
@@ -104,7 +102,7 @@ func DrawAsciiFrame(f Frame, x, y, width, height int) {
 				buff += col.DrawBlank()
 			} else {
 				//buff += col.DrawBlock(int(r), int(g), int(b))
-				buff += col.DrawChar("o", int(r), int(g), int(b))
+				buff += col.DrawChar("x", int(r), int(g), int(b))
 			}
 		}
 	}
