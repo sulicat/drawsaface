@@ -14,8 +14,6 @@ import (
 	"github.com/sulicat/goboi/utils"
 )
 
-const SCALE_FACTOR_W2H = 2
-
 type Frame image.Image
 
 type Drawsaface struct {
@@ -108,5 +106,4 @@ func DrawAsciiFrame(f Frame, x, y, width, height int) {
 	}
 
 	fmt.Print(buff)
-
 }
