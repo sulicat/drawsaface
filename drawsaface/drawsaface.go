@@ -70,8 +70,10 @@ func (daf *Drawsaface) Draw() {
 	for {
 		//w, h, err := getTerminalSize()
 		w, h, _ := term.GetSize(0)
-		DrawAsciiFrame(daf.Writer, daf.Frames[i], 0, 0, w, h)
-
+		start := time.Now()
+		DrawAsciiFrame2(daf.Writer, daf.Frames[i], 0, 0, w, h)
+		dur := time.Since(start)
+		fmt.Fprintf(os.Stderr, "%v\n", dur)
 		// TODO: proper framerate
 		time.Sleep(100000000)
 		i += 1
@@ -84,17 +86,7 @@ func (daf *Drawsaface) Draw() {
 // var writer := bufio.NewWriter(os.Stdout)
 
 func DrawAsciiFrame(w *bufio.Writer, f Frame, x, y, width, height int) {
-	//fmt.Printf("%v\n", f)
-
-	// TODO: Good opportunity to parallize
-	// TODO: gradient for every pixel to determine edge
-
-	// time_start := time.Now()
 	new_image := resize.Resize(uint(width), uint(height), f, resize.NearestNeighbor)
-	// time_image := time.Now()
-
-	// var string_mut sync.Mutex
-	// var wg sync.WaitGroup
 
 	var sb strings.Builder
 	sb.Grow(width * height * 50)
@@ -124,16 +116,6 @@ func DrawAsciiFrame(w *bufio.Writer, f Frame, x, y, width, height int) {
 
 	buff := sb.String()
 
-	// wg.Wait()
-
-	// time_frame := time.Now()
 	fmt.Fprint(w, buff)
 	w.Flush()
-	// time_buffer := time.Now()
-
-	// // some timing code piped to stderr
-	// duration_resize := time_image.Sub(time_start)
-	// duration_frame := time_frame.Sub(time_image)
-	// duration_printf := time_buffer.Sub(time_frame)
-	// fmt.Fprintf(os.Stderr, "w: %d\th: %d\t\t-> %v\t%v\t%v\n", width, height, duration_resize, duration_frame, duration_printf)
 }
