@@ -71,7 +71,7 @@ func (daf *Drawsaface) Draw() {
 		//w, h, err := getTerminalSize()
 		w, h, _ := term.GetSize(0)
 		start := time.Now()
-		DrawAsciiFrame2(daf.Writer, daf.Frames[i], 0, 0, w, h)
+		DrawAsciiFrame(daf.Writer, daf.Frames[i], 0, 0, w, h)
 		dur := time.Since(start)
 		fmt.Fprintf(os.Stderr, "%v\n", dur)
 		// TODO: proper framerate
