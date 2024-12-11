@@ -89,9 +89,9 @@ func DrawAsciiFrame(w *bufio.Writer, f Frame, x, y, width, height int) {
 	// TODO: Good opportunity to parallize
 	// TODO: gradient for every pixel to determine edge
 
-	time_start := time.Now()
+	// time_start := time.Now()
 	new_image := resize.Resize(uint(width), uint(height), f, resize.NearestNeighbor)
-	time_image := time.Now()
+	// time_image := time.Now()
 
 	// var string_mut sync.Mutex
 	// var wg sync.WaitGroup
@@ -116,7 +116,7 @@ func DrawAsciiFrame(w *bufio.Writer, f Frame, x, y, width, height int) {
 				sb.WriteString(col.DrawBlank())
 			} else {
 				sb.WriteString(col.DrawBlock(int(r), int(g), int(b)))
-				sb.WriteString(col.DrawChar("x", int(r), int(g), int(b)))
+				//sb.WriteString(col.DrawChar("x", int(r), int(g), int(b)))
 			}
 
 		}
@@ -126,14 +126,14 @@ func DrawAsciiFrame(w *bufio.Writer, f Frame, x, y, width, height int) {
 
 	// wg.Wait()
 
-	time_frame := time.Now()
+	// time_frame := time.Now()
 	fmt.Fprint(w, buff)
 	w.Flush()
-	time_buffer := time.Now()
+	// time_buffer := time.Now()
 
-	// some timing code piped to stderr
-	duration_resize := time_image.Sub(time_start)
-	duration_frame := time_frame.Sub(time_image)
-	duration_printf := time_buffer.Sub(time_frame)
-	fmt.Fprintf(os.Stderr, "w: %d\th: %d\t\t-> %v\t%v\t%v\n", width, height, duration_resize, duration_frame, duration_printf)
+	// // some timing code piped to stderr
+	// duration_resize := time_image.Sub(time_start)
+	// duration_frame := time_frame.Sub(time_image)
+	// duration_printf := time_buffer.Sub(time_frame)
+	// fmt.Fprintf(os.Stderr, "w: %d\th: %d\t\t-> %v\t%v\t%v\n", width, height, duration_resize, duration_frame, duration_printf)
 }
