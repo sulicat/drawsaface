@@ -4,16 +4,15 @@ import (
 	"bufio"
 	"fmt"
 	"image"
-	"image/png"
+	"math"
 	"os"
 	"strings"
 	"time"
 
-	"github.com/nfnt/resize"
+	"gocv.io/x/gocv"
 	"golang.org/x/term"
 
 	col "github.com/sulicat/goboi/colors"
-	"github.com/sulicat/goboi/utils"
 )
 
 type Frame image.Image
@@ -21,13 +20,17 @@ type Frame image.Image
 type Drawsaface struct {
 	Width  int
 	Height int
-	Frames []Frame
+	Frames []gocv.Mat
 	Writer *bufio.Writer
 }
 
+const char_stable = "x"
+const angle_setting = 0
+const stable_setting = 200
+
 func Create(paths []string) *Drawsaface {
 	daf := Drawsaface{Width: 100, Height: 100}
-	daf.Frames = make([]Frame, 0)
+	daf.Frames = make([]gocv.Mat, 0)
 	daf.Writer = bufio.NewWriter(os.Stdout)
 
 	for _, s := range paths {
@@ -37,30 +40,8 @@ func Create(paths []string) *Drawsaface {
 }
 
 func (daf *Drawsaface) Load(path string) {
-
-	switch utils.FileExtension(path) {
-	case "png":
-		daf.LoadPng(path)
-	}
-}
-
-func (daf *Drawsaface) LoadPng(path string) {
-	file, err := os.Open(path)
-	if err != nil {
-		fmt.Printf(col.BgBrightRed+"ERROR:"+col.Reset+" %s\n", err)
-		return
-	}
-
-	defer file.Close()
-
-	image, err := png.Decode(file)
-	if err != nil {
-		fmt.Printf(col.BgBrightRed+"ERROR:"+col.Reset+" %s\n", err)
-		return
-	}
-
+	image := gocv.IMRead(path, gocv.IMReadColor)
 	daf.Frames = append(daf.Frames, image)
-
 }
 
 func (daf *Drawsaface) Draw() {
@@ -85,37 +66,84 @@ func (daf *Drawsaface) Draw() {
 
 // var writer := bufio.NewWriter(os.Stdout)
 
-func DrawAsciiFrame(w *bufio.Writer, f Frame, x, y, width, height int) {
-	new_image := resize.Resize(uint(width), uint(height), f, resize.NearestNeighbor)
+func choose_char(sx, sy int) string {
+
+	sx_abs := math.Abs(float64(sx))
+	sy_abs := math.Abs(float64(sy))
+
+	if sx_abs < stable_setting && sy_abs < stable_setting {
+		return char_stable
+	} else {
+
+		if sx_abs-angle_setting < sy_abs {
+			return "—"
+		}
+
+		if sy_abs-angle_setting < sx_abs {
+			return "|"
+		}
+
+		if sx_abs > sy_abs {
+			return "/"
+		} else {
+			return "\\"
+		}
+
+		if sy > sx {
+			return "\\"
+		}
+
+	}
+	return "."
+}
+
+func DrawAsciiFrame(w *bufio.Writer, f gocv.Mat, x, y, width, height int) {
+
+	small_f := gocv.NewMat()
+	defer small_f.Close()
+
+	small_f_gray := gocv.NewMat()
+	defer small_f_gray.Close()
+
+	gocv.Resize(f, &small_f, image.Point{width, height}, float64(0), float64(0), gocv.InterpolationArea)
+	gocv.CvtColor(small_f, &small_f_gray, gocv.ColorBGRToGray)
+
+	// Initialize matrices to store the gradients
+	gradX := gocv.NewMat()
+	gradY := gocv.NewMat()
+	defer gradX.Close()
+	defer gradY.Close()
+
+	gocv.Sobel(small_f_gray, &gradX, gocv.MatTypeCV16S, 1, 0, 3, 1, 0, gocv.BorderReflect101)
+	gocv.Sobel(small_f_gray, &gradY, gocv.MatTypeCV16S, 0, 1, 3, 1, 0, gocv.BorderReflect101)
 
 	var sb strings.Builder
 	sb.Grow(width * height * 50)
-
-	//buff := ""
 	sb.WriteString(col.MoveCursor(0, 0))
-	for x := 0; x < width; x++ {
-		for y := 0; y < height; y++ {
 
-			r, g, b, a := new_image.At(x, y).RGBA()
-			r = r >> 8
-			g = g >> 8
-			b = b >> 8
-			a = a >> 8
+	rows := small_f.Rows()
+	cols := small_f.Cols()
+
+	for x := 0; x < cols; x++ {
+		for y := 0; y < rows; y++ {
+
+			vec := small_f.GetVecbAt(y, x)
+			r := vec[2]
+			g := vec[1]
+			b := vec[0]
 
 			sb.WriteString(col.MoveCursor(x, y))
 
-			if a < 200 {
-				sb.WriteString(col.DrawBlank())
-			} else {
-				sb.WriteString(col.DrawBlock(int(r), int(g), int(b)))
-				//sb.WriteString(col.DrawChar("x", int(r), int(g), int(b)))
-			}
+			sx := gradX.GetShortAt(y, x)
+			sy := gradY.GetShortAt(y, x)
+
+			char := choose_char(int(sx), int(sy))
+			sb.WriteString(col.DrawChar(char, int(r), int(g), int(b)))
 
 		}
 	}
 
 	buff := sb.String()
-
 	fmt.Fprint(w, buff)
 	w.Flush()
 }
