@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sulicat/drawsaface/drawsaface"
 	col "github.com/sulicat/goboi/colors"
+	term "github.com/sulicat/goboi/term"
+	utils "github.com/sulicat/goboi/utils"
 )
 
 func usage() {
-
 	fmt.Printf(col.Yellow + "Drawsaface" + col.Reset + " usage:\n")
 	fmt.Printf(col.Red)
 	fmt.Printf("\t drawsaface <input_file>\n")
@@ -24,7 +24,14 @@ func main() {
 		return
 	}
 
-	daf := drawsaface.Create(os.Args[1:])
-	daf.Draw()
+	frame_rate_timer := utils.CreateWaitTimer(1 / 30.0)
 
+	t := term.Create(50, 50)
+	for {
+		if frame_rate_timer.Check() {
+			frame_rate_timer.Reset()
+			t.Resize(t.TermWidth(), t.TermHeight())
+			t.Draw()
+		}
+	}
 }
