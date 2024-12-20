@@ -6,7 +6,6 @@ import (
 
 	col "github.com/sulicat/goboi/colors"
 	term "github.com/sulicat/goboi/term"
-	utils "github.com/sulicat/goboi/utils"
 )
 
 func usage() {
@@ -24,14 +23,11 @@ func main() {
 		return
 	}
 
-	frame_rate_timer := utils.CreateWaitTimer(1 / 30.0)
-
 	t := term.Create(50, 50)
+	// t.SetFullscreen(false)
+
 	for {
-		if frame_rate_timer.Check() {
-			frame_rate_timer.Reset()
-			t.Resize(t.TermWidth(), t.TermHeight())
-			t.Draw()
-		}
+		// this will
+		t.Step()
 	}
 }
