@@ -25,9 +25,21 @@ func main() {
 
 	t := term.Create(50, 50)
 	// t.SetFullscreen(false)
+	// test_float := 123.0
 
 	for {
 		// this will
+
+		t.SameLine()
+		t.Label("asd")
+		t.SetColor(term.RGB{0, 255, 0})
+		t.Label("gello")
+		t.Label("Some Random info")
+		t.Label("These two are on the same line")
+		t.SetColor(term.RGB{0, 0, 255})
+		t.Label("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcdefghi")
+		// t.InputFloat(&test_float)
+
 		t.Step()
 	}
 }
