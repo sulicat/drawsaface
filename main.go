@@ -18,19 +18,31 @@ func main() {
 	// t.SetFullscreen(false)
 	// test_float := 123.0
 
+	is_clicked := false
+
 	for {
 		// this will
 
-		t.SameLine()
+		t.SetColor(term.RGB{255, 0, 255})
 		t.Label("asd")
+
+		t.SameLine()
+
 		t.SetColor(term.RGB{0, 255, 0})
 		t.Label("gello")
-		t.Label("Some Random info")
-		t.Label("These two are on the same line")
-		t.SetColor(term.RGB{0, 0, 255})
-		t.Label("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcdefghi")
+
+		t.SameLine()
+
+		t.SetColor(term.RGB{255, 255, 255})
+		t.Label("Hello wolrd")
+
+		t.Label("gello2")
 
 		if t.Button("ClickMe") {
+			is_clicked = !is_clicked
+		}
+
+		if is_clicked {
 			t.SetColor(term.RGB{255, 0, 0})
 			t.Label("Button Clicked")
 		}
