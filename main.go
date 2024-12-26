@@ -19,6 +19,11 @@ func main() {
 	// test_float := 123.0
 
 	is_clicked := false
+	is_clicked_2 := false
+
+	is_checked := false
+
+	test_float := 500.123
 
 	for {
 		// this will
@@ -43,11 +48,30 @@ func main() {
 		}
 
 		if is_clicked {
+			t.SameLine()
+			if t.Button("Button Clicked") {
+				is_clicked_2 = !is_clicked_2
+			}
+
 			t.SetColor(term.RGB{255, 0, 0})
 			t.Label("Button Clicked")
+
 		}
 
-		// t.InputFloat(&test_float)
+		if is_clicked_2 {
+			t.Label("SHOLD SEE INSIDE")
+		}
+
+		// checkbox
+		t.CheckBox("Check me", &is_checked)
+		t.CheckBox("Check me2", &is_checked)
+		t.CheckBox("Check me3", &is_checked)
+		t.CheckBox("Check me4", &is_checked)
+
+		t.InputFloat(&test_float)
+		t.InputFloat(&test_float)
+		t.InputFloat(&test_float)
+		t.InputFloat(&test_float)
 
 		t.Step()
 	}
