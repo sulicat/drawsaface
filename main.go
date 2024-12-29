@@ -24,6 +24,7 @@ func main() {
 	is_checked := false
 
 	test_float := 500.123
+	test_float2 := 0.000
 
 	for {
 		// this will
@@ -60,6 +61,7 @@ func main() {
 
 		if is_clicked_2 {
 			t.Label("SHOLD SEE INSIDE")
+			t.InputFloat(&test_float2)
 		}
 
 		// checkbox
@@ -69,9 +71,8 @@ func main() {
 		t.CheckBox("Check me4", &is_checked)
 
 		t.InputFloat(&test_float)
-		t.InputFloat(&test_float)
-		t.InputFloat(&test_float)
-		t.InputFloat(&test_float)
+
+		t.Slider(&test_float, 0, 1000)
 
 		t.Step()
 	}
