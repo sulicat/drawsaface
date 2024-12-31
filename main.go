@@ -26,6 +26,8 @@ func main() {
 	test_float := 500.123
 	test_float2 := 0.000
 
+	text_input := "hello world"
+
 	for {
 		// this will
 
@@ -71,8 +73,9 @@ func main() {
 		t.CheckBox("Check me4", &is_checked)
 
 		t.InputFloat(&test_float)
-
 		t.Slider(&test_float, 0, 1000)
+
+		t.InputText(&text_input, 50, 5)
 
 		t.Step()
 	}
