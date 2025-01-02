@@ -58,7 +58,6 @@ func main() {
 
 			t.SetColor(term.RGB{255, 0, 0})
 			t.Label("Button Clicked")
-
 		}
 
 		if is_clicked_2 {
