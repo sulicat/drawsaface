@@ -29,19 +29,12 @@ func main() {
 	text_input := "hello world"
 
 	for {
-		// this will
+		t.ResetColorscheme()
 
-		t.SetColor(term.RGB{255, 0, 255})
 		t.Label("asd")
 
-		t.SameLine()
-
-		t.SetColor(term.RGB{0, 255, 0})
 		t.Label("gello")
-
 		t.SameLine()
-
-		t.SetColor(term.RGB{255, 255, 255})
 		t.Label("Hello wolrd")
 
 		t.Label("gello2")
@@ -56,7 +49,6 @@ func main() {
 				is_clicked_2 = !is_clicked_2
 			}
 
-			t.SetColor(term.RGB{255, 0, 0})
 			t.Label("Button Clicked")
 		}
 
