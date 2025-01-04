@@ -26,7 +26,9 @@ func main() {
 	test_float := 500.123
 	test_float2 := 0.000
 
-	text_input := "hello world"
+	// text_input := "hello world"
+
+	floats := make([]float64, 10)
 
 	for {
 		t.ResetColorscheme()
@@ -59,14 +61,15 @@ func main() {
 
 		// checkbox
 		t.CheckBox("Check me", &is_checked)
-		t.CheckBox("Check me2", &is_checked)
-		t.CheckBox("Check me3", &is_checked)
-		t.CheckBox("Check me4", &is_checked)
+
+		for i := range 3 {
+			t.InputFloat(&floats[i])
+		}
 
 		t.InputFloat(&test_float)
 		t.Slider(&test_float, 0, 1000)
 
-		t.InputText(&text_input, 50, 5)
+		// t.InputText(&text_input, 50, 5)
 
 		t.Step()
 	}
