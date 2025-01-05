@@ -66,7 +66,8 @@ func main() {
 			t.InputFloat(&floats[i])
 		}
 
-		t.InputFloat(&test_float)
+		s := float64(t.GetScroll())
+		t.InputFloat(&s)
 		t.Slider(&test_float, 0, 1000)
 
 		// t.InputText(&text_input, 50, 5)
