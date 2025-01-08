@@ -75,14 +75,15 @@ func main() {
 		t.InputText(&text_input, 50, 5)
 
 		pixels := t.CreatePixels(40, 40)
-		offset += 0.1
+		offset += 0.005
 		for i := range 360 {
 			ang := float64(i) * math.Pi / 180.0
 			x := math.Cos(ang) * 10
-			y := math.Sin(ang) * 10
+			y := math.Sin(ang) * 1 * float64(int(offset)%20-10)
 			x += 15
 			y += 15
-			pixels[int(x)][int(y)] = term.RGB{255, int((float64((i+int(offset))%360) / 360.0) * 255), 0}
+			// pixels[int(x)][int(y)] = term.RGB{255, int((float64((i+int(offset))%360) / 360.0) * 255), 0}
+			pixels[int(x)][int(y)] = term.RGB{255, 255, 0}
 		}
 
 		t.Canvas(&pixels)
