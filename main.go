@@ -83,7 +83,7 @@ func main() {
 			x += 15
 			y += 15
 			// pixels[int(x)][int(y)] = term.RGB{255, int((float64((i+int(offset))%360) / 360.0) * 255), 0}
-			pixels[int(x)][int(y)] = term.RGB{255, 255, 0}
+			pixels[int(x)][int(y)] = term.RGBA{255, 255, 0, 255}
 		}
 
 		t.Canvas(&pixels)
