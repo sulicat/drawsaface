@@ -86,6 +86,7 @@ func main() {
 			pixels[int(x)][int(y)] = term.RGBA{255, 255, 0, 255}
 		}
 
+		t.AbsolutePosition(10, 10)
 		t.Canvas(&pixels)
 
 		t.Step()
